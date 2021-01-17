@@ -1,0 +1,138 @@
+---
+- name: Configure all
+  hosts: all
+  remote_user: root
+
+  tasks:
+
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: /root/sites/onboarding
+      state: directory
+      mode: '0755'
+
+  - name: Copy onboarding website (app.py)
+    ansible.builtin.copy:
+      src: ../app.py
+      dest: /root/sites/onboarding/app.py
+
+  - name: Copy onboarding website (requirements.txt)
+    ansible.builtin.copy:
+      src: ../requirements.txt
+      dest: /root/sites/onboarding/requirements.txt
+
+  - name: Copy onboarding website (onboarding.wsgi)
+    ansible.builtin.copy:
+      src: ../onboarding.wsgi
+      dest: /root/sites/onboarding/onboarding.wsgi
+
+  - name: Copy onboarding website (onboarding.ini)
+    ansible.builtin.copy:
+      src: ../onboarding.ini
+      dest: /root/sites/onboarding/onboarding.ini
+
+  - name: Copy onboarding website (static folder)
+    ansible.builtin.copy:
+      src: ../static/
+      dest: /root/sites/onboarding/static
+
+  - name: Copy onboarding website (templates folder)
+    ansible.builtin.copy:
+      src: ../templates/
+      dest: /root/sites/onboarding/templates
+
+  - name: Create virtualenv for onboarding site
+    shell: /root/.local/bin/virtualenv -p python3 /root/sites/onboarding/venv
+
+  - name: Activate virtualenv onboarding site and install requirements
+    shell: cd /root/sites/onboarding; . /root/sites/onboarding/venv/bin/activate;pip install -r requirements.txt
+
+  - name: Set archive.ubuntu in hosts
+    ansible.builtin.lineinfile:
+      path: /etc/hosts
+      line: "91.189.88.152 archive.ubuntu.com"
+
+  - name: Set security.ubuntu in hosts
+    ansible.builtin.lineinfile:
+      path: /etc/hosts
+      line: "91.189.88.152 security.ubuntu.com"
+
+  - name: Set archive.canonical.com in hosts
+    ansible.builtin.lineinfile:
+      path: /etc/hosts
+      line: "91.189.92.191 archive.canonical.com"
+
+  - name: Install resolvconf
+    apt:
+      name: resolvconf
+      state: present
+
+  - name: Set nameserver to googles
+    command: echo "nameserver 8.8.8.8" | sudo tee /etc/resolvconf/resolv.conf.d/base > /dev/null
+
+  - name: Update all packages to their latest version
+    apt:
+      name: "*"
+      state: latest
+      update_cache: yes
+
+  - name: Install packages
+    apt:
+      pkg: 
+      - git
+      - curl
+      - build-essential
+      - python3-dev
+      - openssh-server
+  
+  - name: Install Apache2
+    apt:
+      name: apache2
+      state: present
+      update_cache: yes
+
+  - name: Remove mysql-server
+    apt:
+      name: mysql-server
+      state: absent
+
+
+  - name: Copy over apache uwsgi.config
+    ansible.builtin.template:
+      src: templates/apache/uwsgi.conf
+      dest: /etc/apache2/conf-available/uwsgi.conf
+
+  - name: Copy over apache uwsgi-ssl.config
+    ansible.builtin.template:
+      src: templates/apache/uwsgi-ssl.conf
+      dest: /etc/apache2/sites-available/uwsgi-ssl.conf
+
+  - name: Copy over uwsgi config.ini
+    ansible.builtin.template:
+      src: templates/uwsgi/config.ini
+      dest: /root/config.ini
+
+  - name: Enable Apache a2enmod proxy_uwsgi
+    command: a2enmod proxy_uwsgi
+
+  - name: Enable uwsgi-ssl site
+    command: a2ensite uwsgi-ssl
+
+  - name: Enable Apache config uwsgi
+    command: a2enconf uwsgi
+
+  - name: Restart apache
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+
+  - name: Fetch acme.sh
+    shell: wget -O -  https://get.acme.sh | sh
+
+  - name: install uwsgi systemd unit file
+    template: src=templates/uwsgi/uwsgi.service dest=/etc/systemd/system/uwsgi.service
+
+  - name: start uwsgi
+    systemd: state=restarted name=uwsgi daemon_reload=yes
+
+

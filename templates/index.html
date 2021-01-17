@@ -13,10 +13,17 @@
 
     <p>Create a public git repo and paste its address here:</p>
     <form action="#" method="POST">
-      Repo: <input name="repo" />
+      Repo: <input name="repo" required />
 
       <br /><br />
-      <input type="submit" value="Host my project" />
+      <input type="submit" value="Host my project" id="go" />
     </form>
+  <script>
+    document.getElementById('go').addEventListener('click', function(e) {
+      e.target.value="Please wait...";
+      e.target.disabled = 'True'
+      document.forms[0].submit()
+    });
+  </script>
   </body>
 </html>

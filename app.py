@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request
-from uuid import uuid4
 import git
 import os
 import re
+import subprocess
+import shutil
+from pathlib import Path
 
 app = Flask(__name__)
 
@@ -31,6 +33,8 @@ strict = true
 chdir = %d
 
 wsgi-file = %d/site.wsgi
+virtualenv = %d/venv
+reload-on-exception
 
 processes = 1
 threads = 2
@@ -46,16 +50,31 @@ socket = /tmp/sockets/%n.sock
 def go():
     try:
         remote = request.form.get("repo", None)
-        # Create directory for site
-        uuid = str(uuid4())
-        os.mkdir("./sites/" + uuid)
-        savePath = f"./sites/{uuid}/"
-        git.Repo.clone_from(remote, savePath, branch="main")
         subdomain = make_subdomain(remote)
+        # Remove old repo if present
+        shutil.rmtree(f"/root/sites/{subdomain}", ignore_errors=True)
+        # Create directory for site
+        os.mkdir("/root/sites/" + subdomain)
+        savePath = f"/root/sites/{subdomain}/"
+        git.Repo.clone_from(remote, savePath, branch="main")
+        webaddress = f"https://{subdomain}.segfault.app"
         # Write wsgi file
         with open(savePath + "/site.wsgi", "w") as fp:
             fp.write("from app import app as application")
-        # Write vassal file
+        # Create virtualenv & install app requirements to it
+        print("Creating virtualenv")
+        subprocess.call(
+            f"export LC_ALL=C.UTF-8; export LANG=C.UTF-8; /root/.local/bin/virtualenv -p python3 {savePath}venv",  # noqa
+            cwd=savePath,
+            shell=True,
+        )
+        # Activate virtualenv and install requirements
+        subprocess.call(
+            f"export LC_ALL=C.UTF-8; export LANG=C.UTF-8; . {savePath}venv/bin/activate;pip install -r {savePath}requirements.txt",  # noqa
+            cwd=savePath,
+            shell=True,
+        )
+        # Write vassal file last because app can only boot once requirements are installed # noqa
         with open(savePath + subdomain + "-vassal.ini", "w") as fp:
             fp.write(
                 vassal_template.format(
@@ -66,4 +85,8 @@ def go():
     except Exception as e:
         print(e)
         return "Error", 500
-    return "OK"
+
+    # Force a reload of the app
+    path = Path(f"{savePath}" + "site.wsgi")
+    path.touch(exist_ok=True)
+    return f"Your web address is <a href='{webaddress}'>{webaddress}</a>"
