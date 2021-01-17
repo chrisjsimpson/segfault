@@ -89,4 +89,5 @@ def go():
     # Force a reload of the app
     path = Path(f"{savePath}" + "site.wsgi")
     path.touch(exist_ok=True)
-    return f"Your web address is <a href='{webaddress}'>{webaddress}</a>"
+
+    return render_template("complete.html", webaddress=webaddress)
