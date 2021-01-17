@@ -9,16 +9,18 @@
   <body>
     <h1>Segfault - Easy Flask web hosting</h1>
 
-    <p>Quickly host your flask web project<p>
+    <p>Quickly host your flask web project.<p>
 
     <p>Useful if you're learning full stack development</p>
 
-    <p>Create a public git repo and paste its address here:</p>
+    <p>Simply paste your git http repo address here, and we'll build your site:</p>
     <form action="#" method="POST">
-      Repo: <input name="repo" required />
+      Repo: <input name="repo" required placeholder="https://github.com/chrisjsimpson/flask-quickstart" />
+
+      <p>Don't have a project yet? Fork this one to start: https://github.com/chrisjsimpson/flask-quickstart</p>
 
       <br /><br />
-      <input type="submit" value="Host my project" id="go" />
+      <input type="submit" value="Host my project now!" id="go" />
     </form>
   <script>
     document.getElementById('go').addEventListener('click', function(e) {
