@@ -3,30 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/style.css')}}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-grid-only@1.0.0/bootstrap.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='/css/style.css') }}" rel="stylesheet">
     <title>Segfault - Easiest Flask web hosting</title>
 </head>
 <body>
 
 <div class="top-section">
-    <div class="wrapper">
-
-    </div>
+    <div class="wrapper"></div>
     <div class="header d-flex justify-content-center align-items-center flex-wrap">
         <div class="row w-100">
-            <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                <h1>
+            <div class="col-sm-12 d-flex justify-content-center align-items-center lh-0">
+                <h1 lh-0>
                     Segfault
                 </h1>
             </div>
-            <div class="col-sm-12 d-flex justify-content-center align-items-center">
+            <div class="col-sm-12 d-flex justify-content-center align-items-center lh-0">
                 <h2>Easy Flask web hosting</h2>
             </div>
         </div>
         <div class="row w-100">
-            <div class="col-sm-12 d-flex justify-content-center align-items-center">
+            <div class="col-sm-12 d-flex justify-content-center align-items-center lh-0">
                 <p class="fs-14">Quickly host your flask web project.
                 <p>
             </div>
@@ -40,7 +37,7 @@
                 <h1>Useful if you're learning full stack development</h1>
             </div>
             <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                <p class="description">Simply paste your git http repo address here, and we'll build your site:</p>
+                <p class="description p-1">Simply paste your git http repo address here, and we'll build your site:</p>
             </div>
         </div>
 
@@ -57,16 +54,14 @@
                         </div>
                     </div>
 
-                    <div class="row w-100 d-flex justify-content-center align-items-center">
-                        <div class="col-sm-12 repo-link d-flex justify-content-center align-items-center">
+                    <div class="row w-100 d-flex justify-content-center align-items-center flex-wrap">
+                        <div class="col-sm-12 repo-link d-flex justify-content-center align-items-center w-100">
                             <input name="repo" placeholder="https://github.com/chrisjsimpson/flask-quickstart" required
                                    type="text"/>
                         </div>
                         <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                        <span class="project-annotation">Don't have a project yet? Fork this one to start:
-                        <strong>
-                        <a href="https://github.com/chrisjsimpson/flask-quickstart" target="_blank" rel="noreferrer">https://github.com/chrisjsimpson/flask-quickstart</a>
-                        </strong> </span>
+                        <span class="project-annotation">Don't have a project yet? Fork this one to start: <strong><a
+                                href="https://github.com/chrisjsimpson/flask-quickstart" target="_blank">https://github.com/chrisjsimpson/flask-quickstart</a></strong> </span>
                         </div>
                     </div>
 
@@ -81,50 +76,47 @@
     </section>
 </div>
 
-
-
-
 <section class="position-relative tt-wrapper">
-        <div class="row w-100">
-            <div class="col-sm-12 col-lg-6">
-                <div class="row w-100">
-                    <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                        <h2>Video demo: How to: Host your flask app</h2>
-                    </div>
-                </div>
-
-                <div class="row w-100">
-                    <div class="col-sm-12">
-                        <div class="tuto-container">
-                            <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                    frameborder="0" height="315"
-                                    src="https://www.youtube.com/embed/QSoG2sRnNnM"
-                                    width="560"></iframe>
-                        </div>
-                    </div>
+    <div class="row w-100">
+        <div class="col-sm-12 col-lg-6">
+            <div class="row w-100">
+                <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                    <h2 class="m-0">Video demo: How to: Host your flask app</h2>
                 </div>
             </div>
-            <div class="col-sm-12 col-lg-6">
-                <div class="row w-100">
-                    <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                        <h2>How to use Flask templates (render_template)</h2>
-                    </div>
-                </div>
 
-                <div class="row w-100">
-                    <div class="col-sm-12">
-                        <div class="tuto-container">
-                            <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                    frameborder="0" height="315"
-                                    src="https://www.youtube.com/embed/QF_AP6RYz3o"
-                                    width="560"></iframe>
-                        </div>
+            <div class="row w-100">
+                <div class="col-sm-12">
+                    <div class="tuto-container">
+                        <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                frameborder="0" height="315"
+                                src="https://www.youtube.com/embed/QSoG2sRnNnM"
+                                width="560"></iframe>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-sm-12 col-lg-6">
+            <div class="row w-100">
+                <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                    <h2 class="m-0">How to use Flask templates (render_template)</h2>
+                </div>
+            </div>
+
+            <div class="row w-100">
+                <div class="col-sm-12">
+                    <div class="tuto-container">
+                        <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                frameborder="0" height="315"
+                                src="https://www.youtube.com/embed/QF_AP6RYz3o"
+                                width="560"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </section>
 
@@ -136,7 +128,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 disclaimer-container">
                 <small>
                     This is made in the hope that it will be useful, but is provided AS IS with ABSOLUTELY NO WARRANTY;
                     The
