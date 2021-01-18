@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400&display=swap');
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body {
+    color: #32373e;
+    font-family: Poppins, sans-serif;
+    background-position: top;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: Poppins, sans-serif;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 3rem;
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+fs-14 {
+    font-size: 14px;
+}
+
+a {
+    color: #4886c3 !important;
+}
+
+a:hover {
+    color: #02a3b9 !important;
+}
+
+input[type = "text"] {
+    font-weight: 200;
+    width: 100%;
+    border: 2px solid lightgray;
+    border-radius: 20px;
+    padding: 20px 15px;
+    color: #575757;
+    height: 20px;
+}
+
+input:focus {
+    outline: none !important;
+}
+
+.repo-link {
+    max-width: 80%;
+    padding: 0 10%;
+}
+
+.top-section{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+
+.wrapper {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 200vh;
+    background: url("/static/img/s.jpg");
+    background-position: top;
+    background-repeat: no-repeat;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.header {
+    background: #1d3d70;
+    text-align: center;
+    padding: 2rem;
+    height: 100%;
+    width: 100%;
+    color: white;
+}
+
+.main-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: #1d3d70;
+    color: white;
+}
+
+.description {
+    font-weight: 300;
+    padding: 19px;
+    margin: 0;
+}
+
+.repo-label {
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0.5rem;
+}
+
+.project-annotation {
+    font-weight: 300;
+    font-size: 14px;
+    padding: 0.5rem;
+}
+
+.submit-container {
+    padding: 4rem 0;
+}
+
+#go {
+    padding: 1rem;
+    border-radius: 50px;
+    background: #7fc348;
+    border: 3px solid white;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+section {
+    width: 100%;
+}
+
+section.tt-wrapper {
+    padding: 2rem;
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f2f2f2;
+}
+
+.tutorial-section {
+    padding: 1.5rem;
+    background: #f2f2f2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.tuto-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tuto-container iframe {
+    margin: 1rem;
+    border-radius: 5px;
+    width: 100%;
+    min-height: 400px;
+}
+
+.footer{
+    background: #1b497b!important;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+
+}
+
+.footer h6{
+    font-weight: 400;
+    font-size: 1.6rem;
+}
+
+.footer small{
+    font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+    section.tt-wrapper {
+        min-height: 11px !important;
+    }
+}
+
+
+/**
+    Mobile / tablet style
+ */
+
+@media (max-width: 560px) {
+    .main-section {
+        padding: 2rem 0rem !important;
+    }
+
+    .repo-link {
+        max-width: 100% !important;
+    }
+
+    .submit-container {
+        padding: 2rem 0 !important;
+    }
+}
+
+/**
+    Scroll bar
+ */
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #1b497b;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #20558a;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #1b497b;
+}
