@@ -5,6 +5,13 @@ import re
 import subprocess
 import shutil
 from pathlib import Path
+from dotenv import load_dotenv
+
+# load settings from environment or from .env
+load_dotenv(verbose=True)
+
+PERSISTENT_DATA_MOUNT_POINT = os.getenv("PERSISTENT_DATA_MOUNT_POINT")
+PAAS_WEB_ADDRESS = os.getenv("PAAS_WEB_ADDRESS")
 
 app = Flask(__name__)
 
@@ -27,22 +34,11 @@ def make_subdomain(repo):
 
 vassal_template = """
 [uwsgi]
-strict = true
-# %d absolute path of the directory containing the configuration file
-# See https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html#magic-variables # noqa
+# Tell uwsgi where the wsgi app is
+wsgi-file = %d/app.wsgi
+
+# Set the current working direcotry for the app
 chdir = %d
-
-wsgi-file = %d/site.wsgi
-virtualenv = %d/venv
-reload-on-exception
-
-processes = 1
-threads = 2
-master = true
-vacuum = true
-subscribe-to = /tmp/sock2:{hostname}
-
-socket = /tmp/sockets/%n.sock
 """
 
 
@@ -51,20 +47,23 @@ def go():
     try:
         remote = request.form.get("repo", None)
         subdomain = make_subdomain(remote)
+        breakpoint()
         # Remove old repo if present
-        shutil.rmtree(f"/root/sites/{subdomain}", ignore_errors=True)
+        shutil.rmtree(
+            f"{PERSISTENT_DATA_MOUNT_POINT}/{subdomain}", ignore_errors=True
+        )  # noqa
         # Create directory for site
-        os.mkdir("/root/sites/" + subdomain)
-        savePath = f"/root/sites/{subdomain}/"
+        os.mkdir(f"{PERSISTENT_DATA_MOUNT_POINT}/" + subdomain)
+        savePath = f"{PERSISTENT_DATA_MOUNT_POINT}/{subdomain}/"
         git.Repo.clone_from(remote, savePath, branch="main")
-        webaddress = f"https://{subdomain}.segfault.app"
+        webaddress = f"https://{subdomain}.{PAAS_WEB_ADDRESS}"
         # Write wsgi file
-        with open(savePath + "/site.wsgi", "w") as fp:
+        with open(savePath + "/app.wsgi", "w") as fp:
             fp.write("from app import app as application")
         # Create virtualenv & install app requirements to it
         print("Creating virtualenv")
         subprocess.call(
-            f"export LC_ALL=C.UTF-8; export LANG=C.UTF-8; /root/.local/bin/virtualenv -p python3 {savePath}venv",  # noqa
+            f"python3 -m venv {savePath}venv",  # noqa
             cwd=savePath,
             shell=True,
         )
@@ -78,7 +77,7 @@ def go():
         with open(savePath + subdomain + "-vassal.ini", "w") as fp:
             fp.write(
                 vassal_template.format(
-                    hostname=make_subdomain(remote) + ".segfault.app"
+                    hostname=make_subdomain(remote) + ".{PAAS_WEB_ADDRESS}"
                 )
             )
 
@@ -87,7 +86,7 @@ def go():
         return "Error", 500
 
     # Force a reload of the app
-    path = Path(f"{savePath}" + "site.wsgi")
+    path = Path(f"{savePath}" + "app.wsgi")
     path.touch(exist_ok=True)
 
     return render_template("complete.html", webaddress=webaddress)
